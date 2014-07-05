@@ -25,15 +25,15 @@ public:
   void stop();
 
 private:
-  void processCloud(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloud);
+  void processCloud(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud);
   void initParameters();
 
   pcl::Grabber* interface;
   pcl::visualization::CloudViewer viewer;
 
-  pcl::VoxelGrid<pcl::PointXYZRGBA> vox_grid;
-  pcl::SACSegmentationFromNormals<pcl::PointXYZRGBA, pcl::Normal> segmentation;
-  pcl::EuclideanClusterExtraction<pcl::PointXYZRGBA> euc_cluster;
+  pcl::VoxelGrid<pcl::PointXYZ> vox_grid;
+  pcl::SACSegmentationFromNormals<pcl::PointXYZ, pcl::Normal> segmentation;
+  pcl::EuclideanClusterExtraction<pcl::PointXYZ> euc_cluster;
 };
 
 

@@ -12,9 +12,9 @@ SimpleVisionProcessor::~SimpleVisionProcessor() {
   stop();
 }
 
-void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloud) {
+void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud) {
   //downsample point cloud
-  pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGBA > ());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZ > ());
   vox_grid.setInputCloud(cloud);
   vox_grid.filter(*cloud_filtered);
   printf("point cloud size raw: %d downsampled: %d\n", cloud->points.size(), cloud_filtered->points.size());
@@ -28,8 +28,8 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZRGBA
   //find ground plane (assumes biggest plane is ground plane)
   //normal estimation
   //NOTE: there's also a plane segmentation that doesn't require normal estimation
-  pcl::NormalEstimation<pcl::PointXYZRGBA, pcl::Normal> ne;
-  pcl::search::KdTree<pcl::PointXYZRGBA>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZRGBA > ());
+  pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> ne;
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ > ());
   pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal > ());
   ne.setSearchMethod(tree);
   ne.setInputCloud(cloud_filtered);
@@ -53,8 +53,8 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZRGBA
   
   //remove ground plane
   // Extract the non-plane points
-  pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_minus_plane(new pcl::PointCloud<pcl::PointXYZRGBA > ());
-  pcl::ExtractIndices<pcl::PointXYZRGBA> extract;
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_minus_plane(new pcl::PointCloud<pcl::PointXYZ > ());
+  pcl::ExtractIndices<pcl::PointXYZ> extract;
   extract.setInputCloud(cloud_filtered);
   extract.setIndices(inliers_plane);
   extract.setNegative(true);
@@ -67,7 +67,7 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZRGBA
   }
 
   //cluster remaining points
-  pcl::search::KdTree<pcl::PointXYZRGBA>::Ptr tree2(new pcl::search::KdTree<pcl::PointXYZRGBA > ());
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree2(new pcl::search::KdTree<pcl::PointXYZ > ());
   tree2->setInputCloud(cloud_minus_plane);
   std::vector<pcl::PointIndices> cluster_indices;
   euc_cluster.setSearchMethod(tree);
@@ -88,7 +88,7 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZRGBA
   //make new point cloud from winning cluster
   //NOTE: this probably isn't necessary, more for debugging
   if (biggest_cluster_it != cluster_indices.end()) {
-    pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGBA>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZ>);
     for (std::vector<int>::const_iterator pit = biggest_cluster_it->indices.begin(); pit != biggest_cluster_it->indices.end(); pit++) {
       cloud_cluster->points.push_back(cloud_minus_plane->points[*pit]); //*
     }
@@ -113,7 +113,7 @@ void SimpleVisionProcessor::run() {
 
   interface = new pcl::OpenNIGrabber();
 
-  boost::function<void (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&) > f =
+  boost::function<void (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr&) > f =
           boost::bind(&SimpleVisionProcessor::processCloud, this, _1);
 
   interface->registerCallback(f);
