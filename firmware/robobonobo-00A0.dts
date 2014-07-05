@@ -4,7 +4,24 @@
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
+
+ Vaguely okay-ish guides that may or probably won't help (but that I don't want to lose):
+ http://www.valvers.com/embedded-linux/beaglebone-black/step04-gpio
+ http://hipstercircuits.com/enable-serialuarttty-on-beaglebone-black/
+ http://hipstercircuits.com/enable-pwm-on-beaglebone-with-device-tree-overlays/
+ http://elinux.org/BeagleBone_and_the_3.8_Kernel
+ http://elinux.org/Beagleboard:BeagleBoneBlack#Revision_C_.28Production_Version.29
+ http://www.logicsupply.com/blog/2013/07/18/disabling-the-beaglebone-black-hdmi-cape/
+ http://hipstercircuits.com/enable-spi-with-device-tree-on-beaglebone-black-copy-paste/
+ http://devicetree.org/Device_Tree_Usage
+ http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/devicetree/usage-model.txt
+ https://github.com/jadonk/validation-scripts/tree/master/test-capemgr
+ https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-single.txt
+ https://github.com/jadonk/bonescript/blob/master/src/bone.js
+ https://docs.google.com/document/d/17P54kZkZO_-JtTjrFuVz-Cp_RMMg7GB_8W9JK9sLKfA/pub
+ https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/device-tree-overlays
  */
+
 /dts-v1/;
 /plugin/;
 
@@ -18,40 +35,45 @@
   /* state the resources this cape uses */
   exclusive-use =
     /* the pin header uses */
-    "P8.11",    /* eQEP2B (GPIO1_13) */
-    "P8.12",    /* eQEP2A (GPIO1_12) */
-    "P8.17",    /* GPIO0_27 */
-    "P8.18",    /* GPIO2_1 */
+    /*** "P8.11",    /* eQEP2B (GPIO1_13) */
+    /*** "P8.12",    /* eQEP2A (GPIO1_12) */
+    /*** "P8.17",    /* GPIO0_27 */
+    /*** "P8.18",    /* GPIO2_1 */
     "P8.19",    /* pwm: ehrpwm2A */
 
-    "P9.11",    /* GPIO0_30 (UART4_RXD) */
-    "P9.12",    /* GPIO1_28 (GPIO1_28) */
-    "P9.21",    /* UART2_TXD */
-    "P9.22",    /* UART2_RXD */
-    "P9.27",    /* eQEP0B (GPIO3_19) */
-    "P9.28",    /* GPIO3_17 (SPI1_CS0) */
+    /*** "P9.11",    /* GPIO0_30 (UART4_RXD) */
+    /*** "P9.12",    /* GPIO1_28 (GPIO1_28) */
+    /*** "P9.21",    /* UART2_TXD */
+    /*** "P9.22",    /* UART2_RXD */
+    /*** "P9.27",    /* eQEP0B (GPIO3_19) */
+    /*** "P9.28",    /* GPIO3_17 (SPI1_CS0) */
     "P9.29",    /* pwm: ehrpwm0B (SPI1_D0) */
-    "P9.30",    /* GPIO3_16 (SPI1_D1) */
+    /*** "P9.30",    /* GPIO3_16 (SPI1_D1) */
     "P9.31",    /* pwm: ehrpwm0A (SPI1_SCLK) */
-    "P9.33",    /* AIN4 */
-    "P9.35",    /* AIN6 */
-    "P9.36",    /* AIN5 */
-    "P9.37",    /* AIN2 */
-    "P9.38",    /* AIN3 */
-    "P9.39",    /* AIN0 */
-    "P9.40",    /* AIN1 */
-    "P9.42",    /* eQEP0A (GPIO3_18):  TODO: set GPIO0_7 to input */
-
+    /* "P9.33",    /* AIN4 */
+    /* "P9.35",    /* AIN6 */
+    /* "P9.36",    /* AIN5 */
+    /* "P9.37",    /* AIN2 */
+    /* "P9.38",    /* AIN3 */
+    /* "P9.39",    /* AIN0 */
+    /* "P9.40",    /* AIN1 */
+    /*** "P9.42",    /* eQEP0A (GPIO3_18):  TODO: set GPIO0_7 to input */
     
     /* the hardware IP uses */
     "ehrpwm0A",
     "ehrpwm0B",
     "ehrpwm2A",
-    "eqep0A",
+    /*"eqep0A",
     "eqep0B",
     "eqep2A",
     "eqep2B",
-    "tscadc",
+    "tscadc",*/
+    "gpio0_27",
+    "gpio0_30",
+    "gpio1_28",
+    "gpio2_1",
+    "gpio3_16",
+    "gpio3_17",
     "uart2";
 
   /* Experimental am33xx unknown overlay */
@@ -130,7 +152,7 @@
         pwms    = <&ehrpwm2 0 5000000 1>;
         pwm-names   = "PWM_P8_19";
 
-        pinctrl-names = "default";
+        pinctrl-names = "Kill_Motor";
         pinctrl-0 = <&pwm_P8_19>;
 
         enabled   = <1>;
@@ -157,7 +179,7 @@
         compatible  = "pwm_test";
         pwms    = <&ehrpwm0 0 5000000 1>;
         pwm-names   = "PWM_P9_29";
-          pinctrl-names = "default";
+          pinctrl-names = "Left_Drive_Motor";
           pinctrl-0 = <&pwm_P9_29>;
         enabled   = <1>;
         duty    = <0>;
@@ -182,11 +204,39 @@
         compatible  = "pwm_test";
         pwms    = <&ehrpwm1 1 5000000 1>;
         pwm-names   = "PWM_P9_31";
-          pinctrl-names = "default";
+          pinctrl-names = "Right_Drive_Motor";
           pinctrl-0 = <&pwm_P9_31>;
         enabled   = <1>;
         duty    = <0>;
         status    = "okay";
+      };
+    };
+  };
+
+  fragment@14 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      weapon_enable_a: pinctrl_test_pins {
+        pinctrl-single,pins = <
+          0x02c 0x7  /* P8_17 muxRegOffset, OUTPUT | MODE7 */
+          /**** 0x08c 0x7  /* P8_18 muxRegOffset, OUTPUT | MODE7 */
+          /**** 0x070 0x7  /* P9_11 muxRegOffset, OUTPUT | MODE7 */
+          /**** 0x078 0x7  /* P9_12 muxRegOffset, OUTPUT | MODE7 */
+          /**** 0x19c 0x7  /* P9_28 muxRegOffset, OUTPUT | MODE7 */
+          /**** 0x198 0x7  /* P9_30 muxRegOffset, OUTPUT | MODE7 */
+        >;
+      };
+    };
+  };
+
+  fragment@15 {
+    target = <&ocp>;
+    __overlay__ {
+      enableWeaponA {
+        compatible = "bone-pinmux-helper";
+        pinctrl-names = "enable-weapon-A";
+        pinctrl-0 = <&weapon_enable_a>;
+        status = "okay";
       };
     };
   };
