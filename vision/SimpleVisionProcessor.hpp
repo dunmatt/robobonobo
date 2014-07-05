@@ -10,7 +10,7 @@
 
 
 #include <pcl/io/openni_grabber.h>
-#include <pcl/visualization/cloud_viewer.h>
+// #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/segmentation/extract_clusters.h>
@@ -29,7 +29,7 @@ private:
   void initParameters();
 
   pcl::Grabber* interface;
-  pcl::visualization::CloudViewer viewer;
+  // pcl::visualization::CloudViewer viewer;
 
   pcl::VoxelGrid<pcl::PointXYZ> vox_grid;
   pcl::SACSegmentationFromNormals<pcl::PointXYZ, pcl::Normal> segmentation;

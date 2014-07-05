@@ -4,7 +4,7 @@
 
 SimpleVisionProcessor::SimpleVisionProcessor()
 : interface(NULL),
-viewer("PCL OpenNI Viewer"),
+// viewer("PCL OpenNI Viewer"),
 vox_grid() {
 }
 
@@ -17,13 +17,13 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZ>::C
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZ > ());
   vox_grid.setInputCloud(cloud);
   vox_grid.filter(*cloud_filtered);
-  printf("point cloud size raw: %d downsampled: %d\n", cloud->points.size(), cloud_filtered->points.size());
+  // printf("point cloud size raw: %d downsampled: %d\n", cloud->points.size(), cloud_filtered->points.size());
 
-  if (!viewer.wasStopped()) {
-    viewer.showCloud(cloud_filtered);
-    //just here for debugging
-    boost::this_thread::sleep(boost::posix_time::seconds(1));
-  }
+  // if (!viewer.wasStopped()) {
+  //   viewer.showCloud(cloud_filtered);
+  //   //just here for debugging
+  //   boost::this_thread::sleep(boost::posix_time::seconds(1));
+  // }
 
   //find ground plane (assumes biggest plane is ground plane)
   //normal estimation
@@ -60,11 +60,11 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZ>::C
   extract.setNegative(true);
   extract.filter(*cloud_minus_plane);
 
-  if (!viewer.wasStopped()) {
-    viewer.showCloud(cloud_minus_plane);
-    //just here for debugging
-    boost::this_thread::sleep(boost::posix_time::seconds(1));
-  }
+  // if (!viewer.wasStopped()) {
+  //   viewer.showCloud(cloud_minus_plane);
+  //   //just here for debugging
+  //   boost::this_thread::sleep(boost::posix_time::seconds(1));
+  // }
 
   //cluster remaining points
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree2(new pcl::search::KdTree<pcl::PointXYZ > ());
@@ -96,11 +96,11 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZ>::C
     cloud_cluster->height = 1;
     cloud_cluster->is_dense = true;
 
-    if (!viewer.wasStopped()) {
-      viewer.showCloud(cloud_cluster);
-      //just here for debugging
-      boost::this_thread::sleep(boost::posix_time::seconds(1));
-    }
+    // if (!viewer.wasStopped()) {
+    //   viewer.showCloud(cloud_cluster);
+    //   //just here for debugging
+    //   boost::this_thread::sleep(boost::posix_time::seconds(1));
+    // }
   }
 
   //TODO: add heuristic to determine if cluster is actually robot
