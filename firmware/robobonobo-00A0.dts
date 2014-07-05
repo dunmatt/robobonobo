@@ -125,7 +125,7 @@
   fragment@9 {
     target = <&ocp>;
     __overlay__ {
-      pwm_test_P8_19 {
+      killMotor {
         compatible  = "pwm_test";
         pwms    = <&ehrpwm2 0 5000000 1>;
         pwm-names   = "PWM_P8_19";
@@ -134,31 +134,31 @@
         pinctrl-0 = <&pwm_P8_19>;
 
         enabled   = <1>;
-        duty    = <5000000>;
+        duty    = <0>;
         status    = "okay";
       };
     };
   };
 
 
-  fragment@16 {
+  fragment@10 {
     target = <&am33xx_pinmux>;
     __overlay__ {
-      pwm_P9_14: pinmux_pwm_P9_14_pins {
-        pinctrl-single,pins = <0x048  0x6>; /* P9_14 (ZCZ ball U14) | MODE 6 */
+      pwm_P9_29: pinmux_pwm_P9_29_pins {
+        pinctrl-single,pins = <0x194  0x1>; /* P9_29 (ZCZ ball U14) | MODE 1 */
       };
     };
   };
 
-  fragment@17 {
+  fragment@11 {
     target = <&ocp>;
     __overlay__ {
-      pwm_test_P9_14 {
+      leftDriveMotor {
         compatible  = "pwm_test";
-        pwms    = <&ehrpwm1 0 5000000 1>;
-        pwm-names   = "PWM_P9_14";
+        pwms    = <&ehrpwm0 0 5000000 1>;
+        pwm-names   = "PWM_P9_29";
           pinctrl-names = "default";
-          pinctrl-0 = <&pwm_P9_14>;
+          pinctrl-0 = <&pwm_P9_29>;
         enabled   = <1>;
         duty    = <0>;
         status    = "okay";
@@ -166,24 +166,24 @@
     };
   };
 
-  fragment@18 {
+  fragment@12 {
     target = <&am33xx_pinmux>;
     __overlay__ {
-      pwm_P9_16: pinmux_pwm_P9_16_pins {
-        pinctrl-single,pins = <0x04c  0x6>; /* P9_16 (ZCZ ball T14) | MODE 6 */
+      pwm_P9_31: pinmux_pwm_P9_31_pins {
+        pinctrl-single,pins = <0x190  0x1>; /* P9_31 (ZCZ ball T14) | MODE 1 */
       };
     };
   };
 
-  fragment@19 {
+  fragment@13 {
     target = <&ocp>;
     __overlay__ {
-      pwm_test_P9_16 {
+      rightDriveMotor {
         compatible  = "pwm_test";
         pwms    = <&ehrpwm1 1 5000000 1>;
-        pwm-names   = "PWM_P9_16";
+        pwm-names   = "PWM_P9_31";
           pinctrl-names = "default";
-          pinctrl-0 = <&pwm_P9_16>;
+          pinctrl-0 = <&pwm_P9_31>;
         enabled   = <1>;
         duty    = <0>;
         status    = "okay";
@@ -191,7 +191,7 @@
     };
   };
 
-  fragment@20 {
+/*  fragment@20 {
     target = <&ocp>;
     __overlay__ {
       #address-cells = <1>;
