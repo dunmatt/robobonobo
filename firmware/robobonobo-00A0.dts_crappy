@@ -20,6 +20,8 @@
  https://github.com/jadonk/bonescript/blob/master/src/bone.js
  https://docs.google.com/document/d/17P54kZkZO_-JtTjrFuVz-Cp_RMMg7GB_8W9JK9sLKfA/pub
  https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/device-tree-overlays
+ 
+https://github.com/Teknoman117/beaglebot/tree/master/encoders/dts
  */
 
 /dts-v1/;
