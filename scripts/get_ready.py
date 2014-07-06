@@ -9,10 +9,12 @@ Options:
   --version         Show the version.
 """
 
+from glob import glob
 import os
 
 gpios = [30, 31, 112, 113, 65, 27]
 gpioBase = "/sys/class/gpio"
+slotsGlob = "/sys/devices/bone_capemgr.?/slots"
 
 
 def setupGpio(pin):
@@ -24,11 +26,17 @@ def setupGpio(pin):
   with open(os.path.join(gpioBase, pindir, "value"), mode="w+") as val:
     val.write("0")
 
+def setupDto():
+  matches = glob(slotsGlob)
+  if hits:
+    with open(matches[0], mode="w+") as slots:
+      slots.write("robobonobo")
 
 
 def main():
   for gpio in gpios:
     setupGpio(str(gpio))
+  setupDto()
 
 def __name__ == "__main__":
   from docopt import docopt
