@@ -28,7 +28,7 @@ def setupGpio(pin):
 
 def setupDto():
   matches = glob(slotsGlob)
-  if hits:
+  if matches:
     with open(matches[0], mode="w+") as slots:
       slots.write("robobonobo")
 
