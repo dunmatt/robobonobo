@@ -1,0 +1,317 @@
+/*
+ * Copyright (C) 2014 Project Hexapod
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+/dts-v1/;
+/plugin/;
+
+/ {
+  compatible = "ti,beaglebone", "ti,beaglebone-black";
+
+  /* identification */
+  part-number = "robobonobo";
+  version = "00A0";
+
+  /* state the resources this cape uses */
+  exclusive-use =
+    /* the pin header uses */
+    "P8.13",    /* pwm: ehrpwm2B */
+    "P8.19",    /* pwm: ehrpwm2A */
+    "P9.14",    /* pwm: ehrpwm1A  hooked up to the LED */
+    "P9.16",    /* pwm: ehrpwm1B  hooked up to the LED */
+    "P9.21",    /* UART2: TXD */
+    "P9.22",    /* UART2: RXD */
+    "P9.29",    /* pwm: ehrpwm0B */
+    "P9.31",    /* pwm: ehrpwm0A */
+    "P9.39",    /* AIN0 */
+    "P9.40",    /* AIN1 */
+    "P9.37",    /* AIN2 */
+    "P9.38",    /* AIN3 */
+    "P9.33",    /* AIN4 */
+    "P9.36",    /* AIN5 */
+    "P9.35",    /* AIN6 */
+
+    
+    /* the hardware IP uses */
+    "uart2",
+    "tscadc",
+    "ehrpwm0A",
+    "ehrpwm0B",
+    "ehrpwm1A",
+    "ehrpwm1B",
+    "ehrpwm2A",
+    "ehrpwm2B";
+
+  /* Experimental am33xx unknown overlay */
+  fragment@0 {
+    target = <&epwmss0>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@1 {
+    target = <&ehrpwm0>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@2 {
+    target = <&ecap0>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@3 {
+    target = <&epwmss1>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@4 {
+    target = <&ehrpwm1>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@5 {
+    target = <&epwmss2>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@6 {
+    target = <&ehrpwm2>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+  fragment@7 {
+    target = <&ecap2>;
+    __overlay__ {
+      status = "okay";
+    };
+  };
+
+
+  /* Working PWM fragments */
+  fragment@8 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pwm_P8_19: pinmux_pwm_P8_19_pins {
+        pinctrl-single,pins = <0x020  0x4>; /* P8_19 (ZCZ ball U10) | MODE 4 */
+      };
+    };
+  };
+
+  fragment@9 {
+    target = <&ocp>;
+    __overlay__ {
+      pwm_test_P8_19 {
+        compatible  = "pwm_test";
+        pwms    = <&ehrpwm2 0 5000000 1>;
+        pwm-names   = "PWM_P8_19";
+
+        pinctrl-names = "default";
+        pinctrl-0 = <&pwm_P8_19>;
+
+        enabled   = <1>;
+        duty    = <5000000>;
+        status    = "okay";
+      };
+    };
+  };
+
+  fragment@10 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pwm_P8_13: pinmux_pwm_P8_13_pins {
+        pinctrl-single,pins = <0x024  0x4>; /* P8_13 (ZCZ ball T10) | MODE 4 */
+      };
+    };
+  };
+
+  fragment@11 {
+    target = <&ocp>;
+    __overlay__ {
+      pwm_test_P8_13 {
+        compatible  = "pwm_test";
+        pwms    = <&ehrpwm2 1 5000000 1>;
+        pwm-names   = "PWM_P8_13";
+
+        pinctrl-names = "default";
+        pinctrl-0 = <&pwm_P8_13>;
+
+        enabled   = <1>;
+        duty    = <5000000>;
+        status    = "okay";
+      };
+    };
+  };
+
+
+
+  fragment@12 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pwm_P9_29: pinmux_pwm_P9_29_pins {
+        pinctrl-single,pins = <0x194  0x1>; /* P9_29 (ZCZ ball V17) | MODE 1 */
+      };
+    };
+  };
+
+  fragment@13 {
+    target = <&ocp>;
+    __overlay__ {
+      pwm_test_P9_29 {
+        compatible  = "pwm_test";
+        pwms    = <&ehrpwm0 1 5000000 1>;
+        pwm-names   = "PWM_P9_29";
+
+        pinctrl-names = "default";
+        pinctrl-0 = <&pwm_P9_29>;
+
+        enabled   = <1>;
+        duty    = <5000000>;
+        status    = "okay";
+      };
+    };
+  };
+
+  fragment@14 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pwm_P9_31: pinmux_pwm_P9_31_pins {
+        pinctrl-single,pins = <0x190  0x1>; /* P9_31 (ZCZ ball A17) | MODE 1 */
+      };
+    };
+  };
+
+  fragment@15 {
+    target = <&ocp>;
+    __overlay__ {
+      pwm_test_P9_31 {
+        compatible  = "pwm_test";
+        pwms    = <&ehrpwm0 0 5000000 1>;
+        pwm-names   = "PWM_P9_31";
+
+        pinctrl-names = "default";
+        pinctrl-0 = <&pwm_P9_31>;
+
+        enabled   = <1>;
+        duty    = <5000000>;
+        status    = "okay";
+      };
+    };
+  };
+
+  fragment@16 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pwm_P9_14: pinmux_pwm_P9_14_pins {
+        pinctrl-single,pins = <0x048  0x6>; /* P9_14 (ZCZ ball U14) | MODE 6 */
+      };
+    };
+  };
+
+  fragment@17 {
+    target = <&ocp>;
+    __overlay__ {
+      pwm_test_P9_14 {
+        compatible  = "pwm_test";
+        pwms    = <&ehrpwm1 0 5000000 1>;
+        pwm-names   = "PWM_P9_14";
+          pinctrl-names = "default";
+          pinctrl-0 = <&pwm_P9_14>;
+        enabled   = <1>;
+        duty    = <0>;
+        status    = "okay";
+      };
+    };
+  };
+
+  fragment@18 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pwm_P9_16: pinmux_pwm_P9_16_pins {
+        pinctrl-single,pins = <0x04c  0x6>; /* P9_16 (ZCZ ball T14) | MODE 6 */
+      };
+    };
+  };
+
+  fragment@19 {
+    target = <&ocp>;
+    __overlay__ {
+      pwm_test_P9_16 {
+        compatible  = "pwm_test";
+        pwms    = <&ehrpwm1 1 5000000 1>;
+        pwm-names   = "PWM_P9_16";
+          pinctrl-names = "default";
+          pinctrl-0 = <&pwm_P9_16>;
+        enabled   = <1>;
+        duty    = <0>;
+        status    = "okay";
+      };
+    };
+  };
+
+  fragment@20 {
+    target = <&ocp>;
+    __overlay__ {
+      #address-cells = <1>;
+      #size-cells = <1>;
+
+      tscadc {
+        compatible = "ti,ti-tscadc";
+        reg = <0x44e0d000 0x1000>;
+
+        interrupt-parent = <&intc>;
+        interrupts = <16>;
+        ti,hwmods = "adc_tsc";
+        status = "okay";
+
+        adc {
+          ti,adc-channels = <0 1 2 3 4 5 6 7>;
+        };
+      };
+
+      test_helper: helper {
+        compatible = "bone-iio-helper";
+        vsense-name  = "AIN0", "AIN1", "AIN2", "AIN3", "AIN4", "AIN5", "AIN6", "AIN7";
+        vsense-scale = <100     100     100     100     100     100     100     100>;
+        status = "okay";
+      };
+    };
+  };/**/
+
+  fragment@21 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      uart_pins: pinmux_uart_pins {
+          pinctrl-single,pins = <
+                                  0x150        0x21        /* spi0_sclk.uart2_rxd | * MODE1 | PULL_UP */
+                                  0x154        0x01        /* spi0_d0.uart2_txd | MODE1 */
+                                >;
+      };
+    };
+  };
+
+  fragment@22 {
+    target = <&uart3>;        /* remember the +1 peculiarity */
+    __overlay__ {
+      status = "okay";
+      pinctrl-names = "default";
+      pinctrl-0 = <&uart_pins>;
+    };
+  };
+
+};
