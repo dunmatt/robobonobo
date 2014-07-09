@@ -1,0 +1,7 @@
+*  Collect vision data and send it to Evan  (high)
+*  Write a teleop script and start calibrating higher level commands
+**  Figure out the commands for go strait, reverse, and drive with a certain angular rotation.
+**  Figure how how quicky the kill motor can be ramped up.
+*  Get example C++ to Python data exchange working.
+*  Finish vision.
+
