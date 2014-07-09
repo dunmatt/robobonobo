@@ -4,4 +4,5 @@
 **  Figure how how quicky the kill motor can be ramped up.
 *  Get example C++ to Python data exchange working.
 *  Finish vision.
+*  Figure out how to launch services and on linux boot.
 
