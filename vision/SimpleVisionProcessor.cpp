@@ -4,8 +4,11 @@
 
 SimpleVisionProcessor::SimpleVisionProcessor()
 : interface(NULL),
+context(1),
+mainAi(context, ZMQ_PUB),
 // viewer("PCL OpenNI Viewer"),
 vox_grid() {
+  mainAi.bind("ipc://vision.ipc");
 }
 
 SimpleVisionProcessor::~SimpleVisionProcessor() {
@@ -106,6 +109,12 @@ void SimpleVisionProcessor::processCloud(const pcl::PointCloud<pcl::PointXYZ>::C
   //TODO: add heuristic to determine if cluster is actually robot
 }
 
+void SimpleVisionProcessor::sendData() {
+  zmq::message_t message(20);  // TODO: probably make this bigger...
+  snprintf("testing", 10);
+  mainAi.send(message);
+}
+
 void SimpleVisionProcessor::run() {
   if (interface != NULL) {
     return;
@@ -121,6 +130,9 @@ void SimpleVisionProcessor::run() {
   initParameters();
 
   interface->start();
+
+  zmq::context_t context (1);
+  zmq::socket_t socket (context, ZMQ_REQ);
 }
 
 void SimpleVisionProcessor::stop() {
