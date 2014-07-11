@@ -14,6 +14,7 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/segmentation/extract_clusters.h>
+#include <zmq.hpp>
 
 class SimpleVisionProcessor {
 public:
@@ -27,6 +28,9 @@ public:
 private:
   void processCloud(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud);
   void initParameters();
+  void sendData();
+  zmq::context_t context;
+  zmq::socket_t mainAi;
 
   pcl::Grabber* interface;
   // pcl::visualization::CloudViewer viewer;
